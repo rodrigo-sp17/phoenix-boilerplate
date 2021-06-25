@@ -72,6 +72,7 @@ defmodule Portal.Accounts do
   def update_user(%User{} = user, attrs) do
     user
     |> User.changeset(attrs)
+    |> put_pass_hash()
     |> Repo.update()
   end
 
