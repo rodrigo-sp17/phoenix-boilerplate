@@ -19,7 +19,7 @@ defmodule PortalWeb.FallbackController do
     conn
     |> put_status(:not_found)
     |> put_view(PortalWeb.ErrorView)
-    |> render(:"404")
+    |> render("error.json", error: :not_found)
   end
 
   def call(conn, {:error, :unauthorized}) do

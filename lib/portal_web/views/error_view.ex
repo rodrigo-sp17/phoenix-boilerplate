@@ -10,8 +10,13 @@ defmodule PortalWeb.ErrorView do
   # By default, Phoenix returns the status message from
   # the template name. For example, "404.html" becomes
   # "Not Found".
-  def template_not_found(template, _assigns) do
-    Phoenix.Controller.status_message_from_template(template)
+  def template_not_found(_template, _assigns) do
+    build_error_json("Not found", "", "")
+    # Phoenix.Controller.status_message_from_template(template)
+  end
+
+  def render("error.json", %{error: :not_found}) do
+    build_error_json("Not found", "", "")
   end
 
   def render("error.json", %{error: :unauthorized}) do
@@ -27,6 +32,10 @@ defmodule PortalWeb.ErrorView do
   def render("error.json", %{error: :bad_request, message: message}) do
     msg = translate_error({message, []})
     build_error_json("Invalid data", msg, "")
+  end
+
+  def render(_conn, _assigns) do
+    build_error_json("Not found", "", "")
   end
 
   @spec build_error_json(String.t(), String.t(), String.t()) :: Map.t()

@@ -6,6 +6,8 @@ defmodule PortalWeb.API.UserController do
 
   action_fallback PortalWeb.FallbackController
 
+  plug :authorize_user when action in [:show, :update, :delete]
+
   def index(conn, _params) do
     users = Accounts.list_users()
     render(conn, "index.json", users: users)
@@ -53,6 +55,17 @@ defmodule PortalWeb.API.UserController do
       {:ok}
     else
       {:error, :bad_request, "Password and confirmation do not match"}
+    end
+  end
+
+  defp authorize_user(conn, _) do
+    user = Accounts.get_user!(conn.params["id"])
+
+    if conn.assigns.user_id == user.id do
+      assign(conn, :user, user)
+    else
+      # TODO - evaluate standardized message from plug
+      send_resp(conn, :forbidden, "")
     end
   end
 end
