@@ -19,8 +19,6 @@ defmodule PortalWeb.Router do
   ## Serves the SPA app
   scope "/", PortalWeb do
     pipe_through :browser
-
-    get "/", PageController, :index
   end
 
   # Authenticated API routes
